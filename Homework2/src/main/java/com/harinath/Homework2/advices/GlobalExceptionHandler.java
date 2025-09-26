@@ -1,5 +1,6 @@
 package com.harinath.Homework2.advices;
 
+import com.harinath.Homework2.exceptions.DepartmentNotExistException;
 import com.harinath.Homework2.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .message("Invalid Arguments")
                 .subErrors(errors)
+                .build();
+        return buildApiResponseForError(apiError);
+    }
+
+    @ExceptionHandler(DepartmentNotExistException.class)
+    public ResponseEntity<ApiResponse<?>> departmentNotFoundHandler(DepartmentNotExistException exception) {
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.NOT_FOUND)
+                .message(exception.getMessage())
                 .build();
         return buildApiResponseForError(apiError);
     }
